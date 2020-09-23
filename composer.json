@@ -1,0 +1,35 @@
+{
+    "name": "phpatom/app",
+    "description": "The application component of the atom framework",
+    "keywords": ["atom", "framework","php"],
+    "license": "MIT",
+    "type": "library",
+    "require": {
+        "phpatom/event": "^0.1.0",
+        "phpatom/di": "^0.1.0",
+        "league/flysystem": "^1.1"
+    },
+    "require-dev": {
+        "squizlabs/php_codesniffer": "3.*",
+        "phpunit/phpunit": "^9.2"
+    },
+    "authors": [
+        {
+            "name": "Nghokeng daniel",
+            "email": "nghokend@gmail.com"
+        }
+    ],
+    "scripts": {
+        "test": "phpunit --coverage-clover=coverage.xml"
+    },
+    "autoload": {
+        "psr-4": {
+            "Atom\\App\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Atom\\App\\Test\\": "tests"
+        }
+    }
+}
