@@ -16,11 +16,11 @@ class Path
 
     public function __construct(string $appPath, ?string $publicPath = null)
     {
+        $this->appPath = $this->removeTrailingSlash($appPath);
         if (!$publicPath) {
             $publicPath = $this->join($this->appPath, "public");
         }
         $this->publicPath = $this->removeTrailingSlash($publicPath);
-        $this->appPath = $this->removeTrailingSlash($appPath);
     }
 
     /**
