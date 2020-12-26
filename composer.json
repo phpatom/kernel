@@ -7,7 +7,8 @@
     "require": {
         "phpatom/event": "^0.1.0",
         "phpatom/di": "^0.1.0",
-        "league/flysystem": "^1.1"
+        "league/flysystem": "^1.1",
+        "vlucas/phpdotenv": "^5.2"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "3.*",

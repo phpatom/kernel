@@ -23,19 +23,7 @@ class Path
         $this->publicPath = $this->removeTrailingSlash($publicPath);
     }
 
-    /**
-     * @param array $paths
-     * @return string
-     */
-    public function public(...$paths): string
-    {
-        if (!empty($paths)) {
-            return $this->join(...array_merge([$this->publicPath], $paths));
-        }
-        return $this->publicPath;
-    }
-
-    public function join(...$paths)
+    public function join(...$paths): string
     {
         return implode(DIRECTORY_SEPARATOR, $paths ?? []);
     }
@@ -52,8 +40,8 @@ class Path
         return $this->appPath;
     }
 
-    private function removeTrailingSlash(string $path)
+    private function removeTrailingSlash(string $path): string
     {
-        return trim(trim($path, "/"), "\\");
+        return rtrim(rtrim($path, "/"), "\\");
     }
 }

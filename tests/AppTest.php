@@ -12,6 +12,7 @@ use Atom\DI\Exceptions\ContainerException;
 use Atom\DI\Exceptions\NotFoundException;
 use Atom\DI\Exceptions\StorageNotFoundException;
 use Atom\Event\EventDispatcher;
+use Atom\Event\Exceptions\ListenerAlreadyAttachedToEvent;
 use PHPUnit\Framework\TestCase;
 
 class AppTest extends TestCase
@@ -31,12 +32,16 @@ class AppTest extends TestCase
         $this->assertInstanceOf(DiskManager::class, $app->disks());
     }
 
+    /**
+     * @throws CircularDependencyException
+     * @throws ContainerException
+     * @throws NotFoundException
+     * @throws StorageNotFoundException
+     */
     public function testPaths()
     {
+        $d = DIRECTORY_SEPARATOR;
         $app = new App("foo");
-        $this->assertEquals($app->path()->app("bar", "baz"), "foo/bar/baz");
-        $this->assertEquals($app->path()->public("bar", "baz"), "public/bar/baz");
-        $app = new App("foo", "public/foo/");
-        $this->assertEquals($app->path()->public("bar", "baz"), "public/foo/bar/baz");
+        $this->assertEquals("foo" . $d . "bar" . $d . "baz", $app->path()->app("bar", "baz"));
     }
 }

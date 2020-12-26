@@ -13,16 +13,12 @@ class PathProvider implements ServiceProviderContract
      * @var string
      */
     private $appPath;
-    /**
-     * @var string|null
-     */
-    private $publicPath;
 
-    public function __construct(string $appPath, ?string $publicPath = null)
+
+    public function __construct(string $appPath)
     {
 
         $this->appPath = $appPath;
-        $this->publicPath = $publicPath;
     }
 
     /**
@@ -34,7 +30,7 @@ class PathProvider implements ServiceProviderContract
         $c = $app->container();
         $c->singletons()->store(
             Path::class,
-            $c->as()->object(new Path($this->appPath, $this->publicPath))
+            $c->as()->object(new Path($this->appPath))
         );
     }
 }

@@ -47,7 +47,7 @@ class DiskManager
         return $this->disks[$label];
     }
 
-    public function has(string $label)
+    public function has(string $label): bool
     {
         return array_key_exists($label, $this->disks);
     }
@@ -68,7 +68,7 @@ class DiskManager
      * @return DiskManager
      * @throws DiskManagerException
      */
-    public static function instance():DiskManager
+    public static function instance(): DiskManager
     {
         if (is_null(self::$instance)) {
             throw new DiskManagerException("No instance of the disk manager was found");
@@ -82,7 +82,7 @@ class DiskManager
      * @throws DiskManagerException
      * @throws DiskNotFoundException
      */
-    public function disk(string $label):Filesystem
+    public function disk(string $label): Filesystem
     {
         return self::instance()->get($label);
     }

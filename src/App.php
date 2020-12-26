@@ -3,12 +3,13 @@
 namespace Atom\App;
 
 use Atom\App\Contracts\ServiceProviderContract;
-use Atom\App\Events\Booted;
+use Atom\App\Env\Env;
 use Atom\App\Events\EventServiceProvider;
 use Atom\App\Events\ServiceProviderRegistered;
 use Atom\App\FileSystem\DiskManager;
 use Atom\App\FileSystem\DiskManagerProvider;
 use Atom\App\FileSystem\Disks\Local;
+use Atom\App\FileSystem\Disks\NullDisk;
 use Atom\App\FileSystem\Path;
 use Atom\App\FileSystem\PathProvider;
 use Atom\DI\DIC;
@@ -45,18 +46,23 @@ class App
     private $disks;
 
     /**
+     * @var Env
+     */
+    private $env;
+
+    /**
      * App constructor.
+     * @param string $env
      * @param string $appDir
-     * @param string|null $publicDir
      * @throws CircularDependencyException
      * @throws ContainerException
      * @throws ListenerAlreadyAttachedToEvent
      * @throws NotFoundException
      * @throws StorageNotFoundException
      */
-    public function __construct(string $appDir, ?string $publicDir = null)
+    public function __construct(string $appDir, string $env = Env::DEV)
     {
-        $this->boot($appDir, $publicDir);
+        $this->boot($appDir, $env);
     }
 
     /**
@@ -114,6 +120,14 @@ class App
     }
 
     /**
+     * @return Env
+     */
+    public function env(): Env
+    {
+        return $this->env;
+    }
+
+    /**
      * @return DiskManager
      * @throws CircularDependencyException
      * @throws ContainerException
@@ -130,22 +144,72 @@ class App
 
     /**
      * @param string $appDir
-     * @param string|null $publicDir
+     * @param string $env
      * @throws CircularDependencyException
      * @throws ContainerException
      * @throws ListenerAlreadyAttachedToEvent
      * @throws NotFoundException
      * @throws StorageNotFoundException
      */
-    private function boot(string $appDir, ?string $publicDir)
+    private function boot(string $appDir, string $env)
     {
         $this->container = new DIC();
         $this->use(new EventServiceProvider());
-        $this->use(new PathProvider($appDir, $publicDir));
-        $this->use(new DiskManagerProvider([
-            new Local($this->path()->app(), "app"),
-            new Local($this->path()->public(), "public"),
-        ]));
+        $this->use(new PathProvider($appDir));
+        $this->use(new DiskManagerProvider([]));
+
+        $this->env = Env::create($this->path()->app(), $env);
+        $this->container->singletons()->bindInstance($this->env);
+    }
+
+    /**
+     * @param array $permissions
+     * @param array|null $config
+     * @param int $writeFlags
+     * @param int $linkHandling
+     * @return App
+     * @throws CircularDependencyException
+     * @throws ContainerException
+     * @throws NotFoundException
+     * @throws StorageNotFoundException
+     */
+    public function useAppDisk(array $permissions = [], ?array $config = null, int $writeFlags = LOCK_EX, int $linkHandling = Local::DISALLOW_LINKS): App
+    {
+        $this->addLocalDisk("/", "app", $permissions, $config, $writeFlags, $linkHandling);
+        return $this;
+    }
+
+    /**
+     * @param string $path
+     * @param string $label
+     * @param array $permissions
+     * @param array|null $config
+     * @param int $writeFlags
+     * @param int $linkHandling
+     * @return App
+     * @throws CircularDependencyException
+     * @throws ContainerException
+     * @throws NotFoundException
+     * @throws StorageNotFoundException
+     */
+    public function addLocalDisk(
+        string $path,
+        string $label,
+        array $permissions = [],
+        ?array $config = null,
+        int $writeFlags = LOCK_EX,
+        int $linkHandling = Local::DISALLOW_LINKS
+    ): App
+    {
+        if ($this->env()->isTesting()) {
+            $this->disks()->add(new NullDisk($label, $config));
+        }
+        $this->disks()
+            ->add(
+                (new Local($this->path()->app($path), $label, $permissions, $writeFlags, $linkHandling))
+                    ->withConfig($config)
+            );
+        return $this;
     }
 
 }

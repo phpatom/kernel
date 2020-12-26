@@ -56,7 +56,8 @@ class Local implements DiskContract
         array $permissions = [],
         int $writeFlags = LOCK_EX,
         int $linkHandling = self::DISALLOW_LINKS
-    ) {
+    )
+    {
         $this->path = $path;
         $this->label = $label;
         $this->permissions = $permissions;
@@ -86,9 +87,11 @@ class Local implements DiskContract
 
     /**
      * @param array $config
+     * @return Local
      */
-    public function withConfig(array $config): void
+    public function withConfig(array $config): Local
     {
         $this->config = $config;
+        return $this;
     }
 }
