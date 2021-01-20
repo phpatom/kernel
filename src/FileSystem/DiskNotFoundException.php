@@ -1,5 +1,5 @@
 <?php
-namespace Atom\App\FileSystem;
+namespace Atom\Kernel\FileSystem;
 
 use \Exception;
 

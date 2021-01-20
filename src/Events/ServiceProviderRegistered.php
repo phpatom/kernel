@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Atom\App\Events;
+namespace Atom\Kernel\Events;
 
 use Atom\Event\AbstractEvent;
 

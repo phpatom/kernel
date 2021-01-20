@@ -33,7 +33,7 @@ The recommended way to install is via Composer:
 
 
 ```
-composer require phpatom/app
+composer require phpatom/kernel
 ```
 
 

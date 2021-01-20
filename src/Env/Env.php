@@ -1,7 +1,6 @@
 <?php
 
-
-namespace Atom\App\Env;
+namespace Atom\Kernel\Env;
 
 use Closure;
 use Dotenv\Dotenv;

@@ -1,12 +1,12 @@
 <?php
 
 
-namespace Atom\App\Contracts;
+namespace Atom\Kernel\Contracts;
 
-use Atom\App\App;
+use Atom\Kernel\Kernel;
 use Atom\Event\EventDispatcher;
 
 interface ServiceProviderContract
 {
-    public function register(App $app);
+    public function register(Kernel $app);
 }

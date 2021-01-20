@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Atom\App\FileSystem;
+namespace Atom\Kernel\FileSystem;
 
 use League\Flysystem\Filesystem;
 

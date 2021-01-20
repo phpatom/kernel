@@ -1,17 +1,17 @@
 <?php
 
-namespace Atom\App;
+namespace Atom\Kernel;
 
-use Atom\App\Contracts\ServiceProviderContract;
-use Atom\App\Env\Env;
-use Atom\App\Events\EventServiceProvider;
-use Atom\App\Events\ServiceProviderRegistered;
-use Atom\App\FileSystem\DiskManager;
-use Atom\App\FileSystem\DiskManagerProvider;
-use Atom\App\FileSystem\Disks\Local;
-use Atom\App\FileSystem\Disks\NullDisk;
-use Atom\App\FileSystem\Path;
-use Atom\App\FileSystem\PathProvider;
+use Atom\Kernel\Contracts\ServiceProviderContract;
+use Atom\Kernel\Env\Env;
+use Atom\Kernel\Events\EventServiceProvider;
+use Atom\Kernel\Events\ServiceProviderRegistered;
+use Atom\Kernel\FileSystem\DiskManager;
+use Atom\Kernel\FileSystem\DiskManagerProvider;
+use Atom\Kernel\FileSystem\Disks\Local;
+use Atom\Kernel\FileSystem\Disks\NullDisk;
+use Atom\Kernel\FileSystem\Path;
+use Atom\Kernel\FileSystem\PathProvider;
 use Atom\DI\DIC;
 use Atom\DI\Exceptions\CircularDependencyException;
 use Atom\DI\Exceptions\ContainerException;
@@ -21,10 +21,10 @@ use Atom\Event\EventDispatcher;
 use Atom\Event\Exceptions\ListenerAlreadyAttachedToEvent;
 
 /**
- * Class App
- * @package Atom\App
+ * Class Kernel
+ * @package Atom\Kernel
  */
-class App
+class Kernel
 {
     /**
      * @var Path
@@ -51,7 +51,7 @@ class App
     private $env;
 
     /**
-     * App constructor.
+     * Kernel constructor.
      * @param string $env
      * @param string $appDir
      * @throws CircularDependencyException
@@ -167,14 +167,18 @@ class App
      * @param array|null $config
      * @param int $writeFlags
      * @param int $linkHandling
-     * @return App
+     * @return Kernel
      * @throws CircularDependencyException
      * @throws ContainerException
      * @throws NotFoundException
      * @throws StorageNotFoundException
      */
-    public function useAppDisk(array $permissions = [], ?array $config = null, int $writeFlags = LOCK_EX, int $linkHandling = Local::DISALLOW_LINKS): App
-    {
+    public function useAppDisk(
+        array $permissions = [],
+        ?array $config = null,
+        int $writeFlags = LOCK_EX,
+        int $linkHandling = Local::DISALLOW_LINKS
+    ): Kernel {
         $this->addLocalDisk("/", "app", $permissions, $config, $writeFlags, $linkHandling);
         return $this;
     }
@@ -186,7 +190,7 @@ class App
      * @param array|null $config
      * @param int $writeFlags
      * @param int $linkHandling
-     * @return App
+     * @return Kernel
      * @throws CircularDependencyException
      * @throws ContainerException
      * @throws NotFoundException
@@ -199,8 +203,7 @@ class App
         ?array $config = null,
         int $writeFlags = LOCK_EX,
         int $linkHandling = Local::DISALLOW_LINKS
-    ): App
-    {
+    ): Kernel {
         if ($this->env()->isTesting()) {
             $this->disks()->add(new NullDisk($label, $config));
         }
@@ -211,5 +214,4 @@ class App
             );
         return $this;
     }
-
 }

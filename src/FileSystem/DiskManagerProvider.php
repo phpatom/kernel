@@ -1,8 +1,8 @@
 <?php
-namespace Atom\App\FileSystem;
+namespace Atom\Kernel\FileSystem;
 
-use Atom\App\App;
-use Atom\App\Contracts\ServiceProviderContract;
+use Atom\Kernel\Kernel;
+use Atom\Kernel\Contracts\ServiceProviderContract;
 use Atom\DI\Exceptions\StorageNotFoundException;
 
 class DiskManagerProvider implements ServiceProviderContract
@@ -18,10 +18,10 @@ class DiskManagerProvider implements ServiceProviderContract
     }
 
     /**
-     * @param App $app
+     * @param Kernel $app
      * @throws StorageNotFoundException
      */
-    public function register(App $app)
+    public function register(Kernel $app)
     {
         $c = $app->container();
         $c->singletons()->store(DiskManager::class, $c->as()->object(new DiskManager($this->disks)));

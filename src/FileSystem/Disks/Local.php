@@ -1,9 +1,9 @@
 <?php
 
 
-namespace Atom\App\FileSystem\Disks;
+namespace Atom\Kernel\FileSystem\Disks;
 
-use Atom\App\FileSystem\DiskContract;
+use Atom\Kernel\FileSystem\DiskContract;
 use League\Flysystem\AdapterInterface;
 
 class Local implements DiskContract

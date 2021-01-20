@@ -1,10 +1,10 @@
 <?php
 
 
-namespace Atom\App\Events;
+namespace Atom\Kernel\Events;
 
-use Atom\App\App;
-use Atom\App\Contracts\ServiceProviderContract;
+use Atom\Kernel\Kernel;
+use Atom\Kernel\Contracts\ServiceProviderContract;
 use Atom\DI\Exceptions\StorageNotFoundException;
 use Atom\Event\Contracts\EventDispatcherContract;
 use Atom\Event\EventDispatcher;
@@ -13,10 +13,10 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 class EventServiceProvider implements ServiceProviderContract
 {
     /**
-     * @param App $app
+     * @param Kernel $app
      * @throws StorageNotFoundException
      */
-    public function register(App $app)
+    public function register(Kernel $app)
     {
         $c = $app->container();
         $eventDispatcher = new EventDispatcher();
